@@ -11,10 +11,11 @@ let timeFactor = 1; // Time dilation factor
 // Spaceship object
 const spaceship = {
   x: 100,
-  y: canvas.height / 2,
+  y: canvas.height / 2, // Start in the middle of the canvas
   width: 40,
   height: 20,
   color: "white",
+  speedY: 0, // Vertical speed
 };
 
 // Obstacles array
@@ -62,15 +63,28 @@ function updateObstacles() {
 
 // Keyboard controls for the spaceship
 document.addEventListener("keydown", (e) => {
-  if (e.code === "ArrowUp") {
-    shipSpeed += acceleration;
+  if (e.key === "ArrowUp") {
+    spaceship.speedY = -2; // Move up
+    shipSpeed += acceleration; // Increase speed
     if (shipSpeed > LIGHT_SPEED) shipSpeed = LIGHT_SPEED;
-    timeFactor = calculateTimeDilation(shipSpeed);
+    timeFactor = calculateTimeDilation(shipSpeed); // Calculate time dilation
+    console.log(`Speed increased to: ${shipSpeed} km/s`);
+    console.log(`Time Dilation Factor: ${timeFactor.toFixed(4)}`);
   }
-  if (e.code === "ArrowDown") {
-    shipSpeed -= acceleration;
+  if (e.key === "ArrowDown") {
+    spaceship.speedY = 2; // Move down
+    shipSpeed -= acceleration; // Decrease speed
     if (shipSpeed < 0) shipSpeed = 0;
-    timeFactor = calculateTimeDilation(shipSpeed);
+    timeFactor = calculateTimeDilation(shipSpeed); // Calculate time dilation
+    console.log(`Speed decreased to: ${shipSpeed} km/s`);
+    console.log(`Time Dilation Factor: ${timeFactor.toFixed(4)}`);
+  }
+});
+
+// Keyboard controls to stop movement when keys are released
+document.addEventListener("keyup", (e) => {
+  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    spaceship.speedY = 0; // Stop movement
   }
 });
 
@@ -78,6 +92,14 @@ document.addEventListener("keydown", (e) => {
 function gameLoop() {
   // Clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Move spaceship based on its speed
+  spaceship.y += spaceship.speedY;
+
+  // Prevent spaceship from moving out of bounds
+  if (spaceship.y < 0) spaceship.y = 0;
+  if (spaceship.y + spaceship.height > canvas.height)
+    spaceship.y = canvas.height - spaceship.height;
 
   // Draw and update elements
   drawSpaceship();
