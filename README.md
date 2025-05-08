@@ -1,3 +1,5 @@
+Hello! I'd love to have folks use this in their classes and learning spaces. Please also feel free to reach out to me if you'd like to add to this game and I could make you a collaborator. 
+
 # relativity
 Creating a simple JavaScript game about relativity. 
 
